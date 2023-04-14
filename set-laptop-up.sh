@@ -3,7 +3,7 @@
 
 snap_install () {
     printf "Installing ${1} ...."
-    snap_info_output=$(snap info ${1})
+    snap_info_output=$(snap list ${1})
     if [ $? -eq 0 ]
     #TODO if a verbose parameter is given, output snap_info_output
     then
