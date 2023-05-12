@@ -25,4 +25,4 @@ fi
 ###### ESSENTIALS #######
 
 snap_install chromium
-
+snap_install brave
