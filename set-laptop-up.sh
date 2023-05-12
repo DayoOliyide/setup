@@ -18,11 +18,21 @@ snap_install () {
 pkg_install () {
     printf "Installing ${1} ...."
     install_status=$(dpkg-query -W --showformat='${db:Status-Status}' ${1} 2>&1)
-    if [ $? -eq 0 ] || [ $status = "installed" ]
+    #NOTE
+    # The $? = 0 check could needed because if you've never installed a package
+    # before, and after you remove certain packages such as hello, dpkg-query 
+    # exits with status 1 and outputs to stderr:
+    #
+    # "dpkg-query: no packages found matching hello"
+    #
+    # instead of outputting not-installed. The 2>&1 captures that error message
+    # too when it comes preventing it from going to the terminal.
+    # FOR NOW NOT CHECKING $? = 0  BUT GOOD TO KNOW FOR FUTURE 
+    if [ $install_status = "installed" ]
     then
         printf " already installed. \n"
     else
-        apt-get install ${1}
+        apt-get -y install ${1}
     fi
 }
 
