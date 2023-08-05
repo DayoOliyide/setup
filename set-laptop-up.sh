@@ -44,6 +44,10 @@ if [ "$EUID" -ne 0 ];then
 fi
 
 
+###### TOOLS ######
+pkg_install openssh-server
+
+
 ###### ESSENTIALS #######
 
 snap_install chromium
