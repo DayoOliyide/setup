@@ -100,10 +100,16 @@ check_for_flathub_repo
 pkg_install zsh
 pkg_install curl
 
+
+
 ###### ESSENTIALS #######
 snap_install chromium
 snap_install brave
+snap_install slack
+snap_install spotify
 flatpak_install org.keepassxc.KeePassXC
+
+
 
 
 ###### DEVELOPMENT #######
