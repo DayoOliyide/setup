@@ -97,9 +97,10 @@ pkg_install flatpak
 pkg_install gnome-software-plugin-flatpak
 check_for_flathub_repo
 
+pkg_install zsh
+pkg_install curl
 
 ###### ESSENTIALS #######
-
 snap_install chromium
 snap_install brave
 flatpak_install org.keepassxc.KeePassXC
