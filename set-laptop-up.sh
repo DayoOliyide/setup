@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SETUP_TEMP_DIR=/tmp/set-laptop-up-files
+
 check_for_flathub_repo () {
     printf "Checking that flathub repo has been added ...."
     flathub_matches=$(flatpak remotes | egrep -c '^flathub\s')    
@@ -74,12 +76,27 @@ pkg_install () {
     # instead of outputting not-installed. The 2>&1 captures that error message
     # too when it comes preventing it from going to the terminal.
     # FOR NOW NOT CHECKING $? = 0  BUT GOOD TO KNOW FOR FUTURE 
-    if [ $install_status = "installed" ]
+    if [ "${install_status}" == "installed" ]
     then
         printf " already installed. \n"
     else
         apt-get -y install ${@}
     fi
+}
+
+
+install_remote_pkg () {
+    temp_file_name=${SETUP_TEMP_DIR}/${1}.deb
+    printf "Installing ${1} .... "
+    install_status=$(dpkg-query -W --showformat='${db:Status-Status}' ${1} 2>&1)
+    if [ "${install_status}" == "installed" ]
+    then
+        printf "already installed. \n"
+    else
+	curl ${2} -o ${temp_file_name}
+        apt-get -y install ${temp_file_name} 
+    fi
+    
 }
 
 setup_spacemacs () {
@@ -114,7 +131,12 @@ then
     exit 1
 fi
 
+###### SETUP ######
 apt update
+mkdir -p ${SETUP_TEMP_DIR}
+
+
+
 
 ###### CORE ######
 pkg_install openssh-server
@@ -142,5 +164,15 @@ flatpak_install org.keepassxc.KeePassXC
 
 pkg_install git
 pkg_install openjdk-17-jdk-headless
+
 snap_install emacs --classic
 setup_spacemacs
+
+snap_install nvim --classic
+install_remote_pkg keybase https://prerelease.keybase.io/keybase_amd64.deb
+
+
+
+
+###### CLEANUP  ######
+rm -rf ${SETUP_TEMP_DIR}
