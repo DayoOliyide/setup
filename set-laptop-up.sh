@@ -38,7 +38,7 @@ flatpak_install () {
     flatpak_matches=$(flatpak list --app | egrep -c "\s${1}\s")
     if [ "$flatpak_matches" -eq 0 ]
     then
-        flatpak install -y flathub ${1}
+        flatpak install -y flathub ${@}
         printf " done\n"
     else
         printf " already installed. \n"
@@ -55,7 +55,7 @@ snap_install () {
     then
         printf " already installed. \n"
     else
-        snap install ${1}
+        snap install ${@}
         printf " done\n"
     fi
 }
@@ -78,7 +78,7 @@ pkg_install () {
     then
         printf " already installed. \n"
     else
-        apt-get -y install ${1}
+        apt-get -y install ${@}
     fi
 }
 
@@ -89,6 +89,7 @@ if [ "$EUID" -ne 0 ];then
     exit 1
 fi
 
+apt update
 
 ###### CORE ######
 pkg_install openssh-server
@@ -115,3 +116,5 @@ flatpak_install org.keepassxc.KeePassXC
 ###### DEVELOPMENT #######
 
 pkg_install git
+pkg_install openjdk-17-jdk-headless
+snap_install emacs --classic
