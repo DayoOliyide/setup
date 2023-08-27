@@ -82,9 +82,34 @@ pkg_install () {
     fi
 }
 
+setup_spacemacs () {
+    # SUDO_UID, SUDO_GID, SUDO_USER environment variables 
+    # are set to the values of the user who runs the 'sudo' command
+    # but due to the fact that they are variables that can be overwritten (highly unlikely)
+    # I've decided to use the output of the command 'logname'
+    
+    user_id=$(getent passwd $(logname) | cut -d: -f3)
+    grp_id=$(getent passwd $(logname) | cut -d: -f4)
+    home_dir=$(getent passwd $(logname) | cut -d: -f6)
+    spacemacs_dir="${home_dir}/.emacs.d"
+
+    printf "Checking to see if ${spacemacs_dir} can be cloned into .....\n"
+    mkdir -p ${spacemacs_dir}
+    if [ -z "$(ls -A ${spacemacs_dir})" ]
+    then
+        printf "${spacemacs_dir} is empty, will git clone Spacemacs into it.\n"
+        git clone https://github.com/syl20bnr/spacemacs ${spacemacs_dir}
+        # $(cd ${spacemacs_dir} && git checkout develop) 
+        chown -R ${user_id}:${grp_id} ${spacemacs_dir}
+        printf "Spacemacs cloned into ${spacemacs_dir}\n"
+    else
+        printf "${spacemacs_dir} already contains something, will NOT clone Spacemacs into it!\n"
+    fi
+}
 
 ###### MAIN
-if [ "$EUID" -ne 0 ];then
+if [ "$EUID" -ne 0 ]
+then
     echo "Please run this script as root user or sudo it"
     exit 1
 fi
@@ -118,3 +143,4 @@ flatpak_install org.keepassxc.KeePassXC
 pkg_install git
 pkg_install openjdk-17-jdk-headless
 snap_install emacs --classic
+setup_spacemacs
