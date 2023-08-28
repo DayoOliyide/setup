@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 SETUP_TEMP_DIR=/tmp/set-laptop-up-files
 
 check_for_flathub_repo () {
@@ -36,26 +38,26 @@ check_for_flathub_repo () {
 
 
 flatpak_install () {
-    printf "Installing flatpak ${1} ...."
+    printf "Installing flatpak ${1} .... "
     flatpak_matches=$(flatpak list --app | egrep -c "\s${1}\s")
     if [ "$flatpak_matches" -eq 0 ]
     then
         flatpak install -y flathub ${@}
-        printf " done\n"
+        printf "done\n"
     else
-        printf " already installed. \n"
+        printf "already installed.\n"
     fi
 }
 
 
 
 snap_install () {
-    printf "Installing snap ${1} ...."
+    printf "Installing snap ${1} .... "
     snap_info_output=$(snap list ${1})
     if [ $? -eq 0 ]
     #TODO if a verbose parameter is given, output snap_info_output
     then
-        printf " already installed. \n"
+        printf "already installed.\n"
     else
         snap install ${@}
         printf " done\n"
@@ -64,7 +66,7 @@ snap_install () {
 
 
 pkg_install () {
-    printf "Installing ${1} ...."
+    printf "Installing ${1} .... "
     install_status=$(dpkg-query -W --showformat='${db:Status-Status}' ${1} 2>&1)
     #NOTE
     # The $? = 0 check could needed because if you've never installed a package
@@ -78,7 +80,7 @@ pkg_install () {
     # FOR NOW NOT CHECKING $? = 0  BUT GOOD TO KNOW FOR FUTURE 
     if [ "${install_status}" == "installed" ]
     then
-        printf " already installed. \n"
+        printf "already installed.\n"
     else
         apt-get -y install ${@}
     fi
@@ -86,12 +88,12 @@ pkg_install () {
 
 
 install_remote_pkg () {
-    temp_file_name=${SETUP_TEMP_DIR}/${1}.deb
+    local temp_file_name=${SETUP_TEMP_DIR}/${1}.deb
     printf "Installing ${1} .... "
     install_status=$(dpkg-query -W --showformat='${db:Status-Status}' ${1} 2>&1)
     if [ "${install_status}" == "installed" ]
     then
-        printf "already installed. \n"
+        printf "already installed.\n"
     else
 	curl ${2} -o ${temp_file_name}
         apt-get -y install ${temp_file_name} 
@@ -123,6 +125,23 @@ setup_spacemacs () {
         printf "${spacemacs_dir} already contains something, will NOT clone Spacemacs into it!\n"
     fi
 }
+
+install_clojure () {
+    local temp_file_name=${SETUP_TEMP_DIR}/clojure-linux-install.sh
+    local clojure_installer_url="https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh"
+
+    printf "Installing latest Clojure .... "
+    if [ -e /usr/local/bin/clj ] || [ -e /usr/local/bin/clojure ]
+    then
+        printf "already installed.\n"
+    else
+        curl -L ${clojure_installer_url} -o ${temp_file_name} 
+        chmod +x ${temp_file_name}
+	source ${temp_file_name}
+    fi
+}
+
+
 
 ###### MAIN
 if [ "$EUID" -ne 0 ]
@@ -164,6 +183,7 @@ flatpak_install org.keepassxc.KeePassXC
 
 pkg_install git
 pkg_install openjdk-17-jdk-headless
+install_clojure
 
 snap_install emacs --classic
 setup_spacemacs
