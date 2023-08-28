@@ -5,11 +5,11 @@ set -eu
 SETUP_TEMP_DIR=/tmp/set-laptop-up-files
 
 check_for_flathub_repo () {
-    printf "Checking that flathub repo has been added ...."
+    printf "Installing flathub repo .... "
     flathub_matches=$(flatpak remotes | egrep -c '^flathub\s')    
     if [ "$flathub_matches" -eq 0 ]
     then
-        printf " flathub repo NOT found!\n"
+        printf "\n flathub repo NOT found!\n"
         printf "Adding flathub repo .....\n"
         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         if [ $? -ne 0 ]
@@ -31,7 +31,7 @@ check_for_flathub_repo () {
             exit 3
         fi
     else
-        printf " flathub repo found\n"
+        printf "already installed.\n"
     fi
 }
 
@@ -112,7 +112,8 @@ setup_spacemacs () {
     home_dir=$(getent passwd $(logname) | cut -d: -f6)
     spacemacs_dir="${home_dir}/.emacs.d"
 
-    printf "Checking to see if ${spacemacs_dir} can be cloned into .....\n"
+    printf "Installing Spacemacs .... "
+
     mkdir -p ${spacemacs_dir}
     if [ -z "$(ls -A ${spacemacs_dir})" ]
     then
@@ -122,7 +123,7 @@ setup_spacemacs () {
         chown -R ${user_id}:${grp_id} ${spacemacs_dir}
         printf "Spacemacs cloned into ${spacemacs_dir}\n"
     else
-        printf "${spacemacs_dir} already contains something, will NOT clone Spacemacs into it!\n"
+        printf "already installed. ${spacemacs_dir} is NOT empty, won't clone Spacemacs into it\n"
     fi
 }
 
