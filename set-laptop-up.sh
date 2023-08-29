@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -u
 
 SETUP_TEMP_DIR=/tmp/set-laptop-up-files
 
@@ -181,7 +181,7 @@ flatpak_install org.keepassxc.KeePassXC
 
 
 ###### DEVELOPMENT #######
-
+pkg_install direnv
 pkg_install git
 pkg_install openjdk-17-jdk-headless
 install_clojure
