@@ -176,6 +176,7 @@ snap_install chromium
 snap_install brave
 snap_install slack
 snap_install spotify
+snap_install discord
 flatpak_install org.keepassxc.KeePassXC
 
 
