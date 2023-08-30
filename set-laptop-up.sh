@@ -167,6 +167,7 @@ check_for_flathub_repo
 
 pkg_install zsh
 pkg_install curl
+pkg_install tree
 
 
 
