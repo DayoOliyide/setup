@@ -194,6 +194,7 @@ setup_spacemacs
 snap_install nvim --classic
 install_remote_pkg keybase https://prerelease.keybase.io/keybase_amd64.deb
 
+snap_install postman
 
 
 
