@@ -172,6 +172,7 @@ pkg_install tree
 
 
 ###### ESSENTIALS #######
+pkg_install vlc
 snap_install chromium
 snap_install brave
 snap_install slack
