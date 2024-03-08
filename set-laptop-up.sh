@@ -178,7 +178,7 @@ snap_install brave
 snap_install slack
 snap_install spotify
 snap_install discord
-flatpak_install org.keepassxc.KeePassXC
+# flatpak_install org.keepassxc.KeePassXC
 
 
 
@@ -196,6 +196,7 @@ snap_install nvim --classic
 install_remote_pkg keybase https://prerelease.keybase.io/keybase_amd64.deb
 
 snap_install postman
+snap_install code --classic
 
 
 
