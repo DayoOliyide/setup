@@ -197,6 +197,7 @@ install_remote_pkg keybase https://prerelease.keybase.io/keybase_amd64.deb
 
 snap_install postman
 snap_install code --classic
+snap_install intellij-idea-community --classic
 
 
 
