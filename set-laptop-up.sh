@@ -188,6 +188,8 @@ pkg_install direnv
 pkg_install git
 pkg_install openjdk-17-jdk-headless
 install_clojure
+pkg_install python3
+pkg_install python3-pip
 
 snap_install emacs --classic
 setup_spacemacs
@@ -198,6 +200,7 @@ install_remote_pkg keybase https://prerelease.keybase.io/keybase_amd64.deb
 snap_install postman
 snap_install code --classic
 snap_install intellij-idea-community --classic
+snap_install pycharm-community --classic
 
 
 
