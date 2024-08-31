@@ -173,6 +173,7 @@ pkg_install tree
 
 ###### ESSENTIALS #######
 pkg_install vlc
+pkg_install gnome-tweaks                             # For remapping keys under Gnome
 snap_install chromium
 snap_install brave
 snap_install slack
@@ -187,7 +188,7 @@ snap_install discord
 pkg_install direnv
 pkg_install git
 pkg_install openjdk-17-jdk-headless
-pkg_install rlwrap # For clojure clj tool
+pkg_install rlwrap                                    # For clojure clj tool
 install_clojure
 pkg_install python3
 pkg_install python3-pip
