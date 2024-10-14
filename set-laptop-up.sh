@@ -187,6 +187,7 @@ snap_install discord
 ###### DEVELOPMENT #######
 pkg_install direnv
 pkg_install git
+pkg_install tig
 pkg_install openjdk-17-jdk-headless
 pkg_install rlwrap                                    # For clojure clj tool
 install_clojure
